@@ -137,13 +137,27 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
         /// <param name="index"></param>
         public void UpdateContent(Mapset item, int index)
         {
-            Creator.Text = $"{item.Creator}";
-
+            // Give title an elipsis
             if (MapsetHelper.IsSingleDifficultySorted())
             {
                 Title.FontSize = 22;
                 Title.Text = $"{item.Artist} - {item.Title}";
+                Title.TruncateWithEllipsis(400);
+            }
+            else
+            {
+                Title.FontSize = 26;
+                Title.Text = item.Title;
+                Title.TruncateWithEllipsis(400);
 
+                Artist.Text = $"{item.Artist}";
+                Artist.TruncateWithEllipsis(400);
+            }
+
+            Creator.Text = $"{item.Creator}";
+
+            if (MapsetHelper.IsSingleDifficultySorted())
+            {
                 var map = ParentMapset.Item.Maps.First();
 
                 var diff = map.DifficultyFromMods(ModManager.Mods);
@@ -163,14 +177,12 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
                     OnlineGrade.Size = new ScalableVector2(width, OnlineGrade.Image.Height / OnlineGrade.Image.Width * width);
 
                     Title.X = OnlineGrade.X + OnlineGrade.Width + 16;
-                    Title.TruncateWithEllipsis(400 - (int)OnlineGrade.Width - 16);
                     Artist.X = Title.X;
                     DifficultyName.X = Artist.X;
                 }
                 else
                 {
                     Title.X = TitleX;
-                    Title.TruncateWithEllipsis(400);
                     Artist.X = TitleX;
                     DifficultyName.X = TitleX;
                     OnlineGrade.Visible = false;
@@ -181,13 +193,6 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
             }
             else
             {
-                Title.FontSize = 26;
-                Title.Text = item.Title;
-                Title.TruncateWithEllipsis(400);
-
-                Artist.Text = $"{item.Artist}";
-                Artist.TruncateWithEllipsis(400);
-
                 // Title.X = TitleX;
                 Artist.X = TitleX;
                 DividerLine.X = Artist.X + Artist.Width + ArtistCreatorSpacingX;

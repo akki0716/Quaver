@@ -40,9 +40,7 @@ using Quaver.Shared.Screens.Results.UI;
 using Quaver.Shared.Screens.Results.UI.Header.Contents.Tabs;
 using Quaver.Shared.Screens.Selection;
 using Quaver.Shared.Screens.Tournament.Gameplay;
-using Quaver.Shared.Skinning;
 using Wobble;
-using Wobble.Audio.Samples;
 using Wobble.Bindables;
 using Wobble.Graphics.UI.Dialogs;
 using Wobble.Input;
@@ -136,9 +134,6 @@ namespace Quaver.Shared.Screens.Results
 
             SetDiscordRichPresence();
             View = new ResultsScreenView(this);
-            
-            if (!Gameplay.Failed)
-                SkinManager.Skin.SoundApplause.CreateChannel().Play();
         }
 
         /// <summary>
