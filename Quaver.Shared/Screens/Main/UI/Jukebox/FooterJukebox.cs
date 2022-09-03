@@ -246,9 +246,11 @@ namespace Quaver.Shared.Screens.Main.UI.Jukebox
         /// </summary>
         private void SelectNextTrackIfFinished()
         {
-            bool disableFooterJukebox = true;
+            //mod_a 起動時の音楽再生を停止 start
+            var disableFooterJukebox = true;
             if (disableFooterJukebox)
                 return;
+            //起動時の音楽再生を停止 end
 
             // Don't execute if we're in the middle of loading a new track.
             if (LoadingNextTrack)
