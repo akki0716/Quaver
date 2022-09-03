@@ -246,6 +246,10 @@ namespace Quaver.Shared.Screens.Main.UI.Jukebox
         /// </summary>
         private void SelectNextTrackIfFinished()
         {
+            bool disableFooterJukebox = true;
+            if (disableFooterJukebox)
+                return;
+
             // Don't execute if we're in the middle of loading a new track.
             if (LoadingNextTrack)
                 return;
