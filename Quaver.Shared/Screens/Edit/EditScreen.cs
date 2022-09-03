@@ -52,6 +52,10 @@ namespace Quaver.Shared.Screens.Edit
 {
     public sealed class EditScreen : QuaverScreen, IHasLeftPanel
     {
+        //mod_a エディタでのマウススクロールを逆にする start
+        public bool InvertScroll = true;
+        //エディタでのマウススクロールを逆にする end
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -658,7 +662,16 @@ namespace Quaver.Shared.Screens.Edit
             if (Track == null || Track.IsDisposed || (!CanSeek() && !leftPressed))
                 return;
 
-            HandleSeeking(Direction.Backward);
+            //mod_a エディタでのマウススクロールを逆にする start
+            if (InvertScroll)
+            {
+                HandleSeeking(Direction.Forward);
+            }
+            else
+            {
+                HandleSeeking(Direction.Backward);
+            }
+            //mod_a エディタでのマウススクロールを逆にする end
         }
 
         /// <summary>
@@ -673,8 +686,17 @@ namespace Quaver.Shared.Screens.Edit
             if (Track == null || Track.IsDisposed || (!CanSeek() && !rightPressed))
                 return;
 
-            HandleSeeking(Direction.Forward);
-        }
+            //mod_a エディタでのマウススクロールを逆にする start
+            if (InvertScroll)
+            {
+                HandleSeeking(Direction.Backward);
+            }
+            else
+            {
+                HandleSeeking(Direction.Forward);
+            }
+            //mod_a エディタでのマウススクロールを逆にする end
+          }
 
         /// <summary>
         /// </summary>
