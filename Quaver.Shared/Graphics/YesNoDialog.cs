@@ -130,23 +130,25 @@ namespace Quaver.Shared.Graphics
                     return;
                 }
 
-                if (HandleEnterPress && KeyboardManager.IsUniqueKeyPress(Keys.Enter))
-                {
-                    YesAction?.Invoke();
+                // mod_a メタデータ編集時にEnterキーでのダイアログ決定を無効化 Start
+                //if (HandleEnterPress && KeyboardManager.IsUniqueKeyPress(Keys.Enter))
+                //{
+                //    YesAction?.Invoke();
 
-                    if (ValidateBeforeClosing == null)
-                    {
-                        Close();
-                        return;
-                    }
+                //    if (ValidateBeforeClosing == null)
+                //    {
+                //        Close();
+                //        return;
+                //    }
 
-                    var canClose = ValidateBeforeClosing?.Invoke();
+                //    var canClose = ValidateBeforeClosing?.Invoke();
 
-                    if (canClose.Value)
-                        Close();
+                //    if (canClose.Value)
+                //        Close();
 
-                    return;
-                }
+                //    return;
+                //}
+                // mod_a メタデータ編集時にEnterキーでのダイアログ決定を無効化 End
             }
         }
 
