@@ -124,13 +124,19 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
         ///     The position at which the next Hit Object must be at in order to add a new Hit Object to the pool.
         ///     TODO: Update upon scroll speed changes
         /// </summary>
-        public float CreateObjectPosition { get; private set; }
+        public float CreateObjectPositionThreshold { get; private set; }
 
         /// <summary>
         ///     The position at which the earliest Hit Object must be at before its recycled.
         ///     TODO: Update upon scroll speed changes
         /// </summary>
-        public float RecycleObjectPosition { get; private set; }
+        public float RecycleObjectPositionThreshold { get; private set; }
+
+        /// <summary>
+        ///     A new hitobject is added to the pool if the next one is needs to be hit within this many milliseconds
+        ///     TODO: Update upon scroll speed changes
+        /// </summary>
+        public float CreateObjectTimeThreshold { get; private set; }
 
         /// <summary>
         ///     Current position for Hit Objects.
@@ -474,7 +480,8 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
             // Add more hit objects to the pool if necessary
             foreach (var lane in HitObjectQueueLanes)
             {
-                while (lane.Count > 0 && CurrentTrackPosition - GetPositionFromTime(lane.Peek().StartTime) > CreateObjectPosition)
+                while (lane.Count > 0 && ((Math.Abs(CurrentTrackPosition - GetPositionFromTime(lane.Peek().StartTime)) < CreateObjectPositionThreshold) ||
+                      (lane.Peek().StartTime - CurrentAudioPosition < CreateObjectTimeThreshold)))
                 {
                     CreatePoolObject(lane.Dequeue());
                 }
@@ -528,7 +535,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
                     if (im?.ReplayInputManager == null)
                     {
                         playfield.Stage.ComboDisplay.MakeVisible();
-                        playfield.Stage.JudgementHitBurst.PerformJudgementAnimation(Judgement.Miss);
+                        playfield.Stage.JudgementHitBursts[Math.Clamp(hitObject.Info.Lane - 1, 0, playfield.Stage.JudgementHitBursts.Count - 1)].PerformJudgementAnimation(Judgement.Miss);
                     }
 
                     // If ManiaHitObject is an LN, kill it and count it as another miss because of the tail.
@@ -611,7 +618,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
                     if (im?.ReplayInputManager == null)
                     {
                         stage.ComboDisplay.MakeVisible();
-                        stage.JudgementHitBurst.PerformJudgementAnimation(missedReleaseJudgement);
+                        stage.JudgementHitBursts[Math.Clamp(hitObject.Info.Lane - 1, 0, stage.JudgementHitBursts.Count - 1)].PerformJudgementAnimation(missedReleaseJudgement);
                     }
 
                     stage.HitLightingObjects[hitObject.Info.Lane - 1].StopHolding();
@@ -631,7 +638,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
             foreach (var lane in DeadNoteLanes)
             {
                 while (lane.Count > 0 &&
-                    (CurrentTrackPosition - lane.Peek().LatestTrackPosition > RecycleObjectPosition))
+                    Math.Abs(CurrentTrackPosition - lane.Peek().LatestTrackPosition) > RecycleObjectPositionThreshold)
                 {
                     RecyclePoolObject(lane.Dequeue());
                 }
@@ -672,8 +679,10 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
         /// </summary>
         private void UpdatePoolingPositions()
         {
-            RecycleObjectPosition = (ObjectPositionMagnitude / 4) / ScrollSpeed;
-            CreateObjectPosition = -ObjectPositionMagnitude / ScrollSpeed;
+            RecycleObjectPositionThreshold = ObjectPositionMagnitude / ScrollSpeed;
+            CreateObjectPositionThreshold = ObjectPositionMagnitude / ScrollSpeed;
+
+            CreateObjectTimeThreshold = ObjectPositionMagnitude / ScrollSpeed / TrackRounding;
         }
 
         /// <summary>
@@ -917,6 +926,12 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
 
             InitializeInfoPool(Ruleset.Map, true);
             InitializeObjectPool();
+
+            foreach (var timingLineManager in Ruleset.TimingLineManager)
+            {
+                timingLineManager.InitializeObjectPool();
+            }
+
             Update(new GameTime());
         }
 

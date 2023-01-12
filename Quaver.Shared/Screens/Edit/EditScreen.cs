@@ -30,6 +30,7 @@ using Quaver.Shared.Screens.Edit.Actions.HitObjects.PlaceBatch;
 using Quaver.Shared.Screens.Edit.Actions.HitObjects.Resnap;
 using Quaver.Shared.Screens.Edit.Dialogs;
 using Quaver.Shared.Screens.Edit.Dialogs.Metadata;
+using Quaver.Shared.Screens.Edit.Input;
 using Quaver.Shared.Screens.Edit.Plugins;
 using Quaver.Shared.Screens.Edit.Plugins.Timing;
 using Quaver.Shared.Screens.Edit.UI;
@@ -231,6 +232,10 @@ namespace Quaver.Shared.Screens.Edit
 
         /// <summary>
         /// </summary>
+        public EditorInputManager InputManager { get; }
+
+        /// <summary>
+        /// </summary>
         public Bindable<SelectContainerPanel> ActiveLeftPanel { get; set; } = new Bindable<SelectContainerPanel>(SelectContainerPanel.MapPreview);
 
         /// <summary>
@@ -285,6 +290,7 @@ namespace Quaver.Shared.Screens.Edit
             AddFileWatcher();
 
             View = new EditScreenView(this);
+            InputManager = new EditorInputManager(this);
         }
 
         /// <inheritdoc />
@@ -444,6 +450,9 @@ namespace Quaver.Shared.Screens.Edit
         /// </summary>
         private void HandleInput()
         {
+            if (Exiting)
+                return;
+
             if (DialogManager.Dialogs.Count != 0)
                 return;
 
@@ -451,6 +460,8 @@ namespace Quaver.Shared.Screens.Edit
 
             if (view.IsImGuiHovered)
                 return;
+
+            InputManager.HandleInput();
 
             HandleKeyPressSpace();
             HandleKeyPressPlayfieldZoom();
