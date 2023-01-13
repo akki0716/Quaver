@@ -95,10 +95,12 @@ namespace Quaver.Shared.Online
         /// </summary>
         public static void Initialize()
         {
-#if DEBUG
+//mod_a リリースビルドしたexeが起動できるようにする対応 start
+//#if DEBUG
             // Creates a file with the Steam Application Id, this is required for debugging
             File.WriteAllText($"{Directory.GetCurrentDirectory()}/steam_appid.txt", ApplicationId.ToString());
-#endif
+//#endif
+//mod_a リリースビルドしたexeが起動できるようにする対応 end
             // Make sure the game is started with Steam.
             if (SteamAPI.RestartAppIfNecessary((AppId_t) ApplicationId))
                 Environment.Exit(0);
