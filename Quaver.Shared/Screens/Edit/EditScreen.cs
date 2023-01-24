@@ -476,6 +476,9 @@ namespace Quaver.Shared.Screens.Edit
                 HandleKeyPressUp();
                 HandleKeyPressDown();
                 HandleKeyPressShiftUpDown();
+                HandleKeyPressQDown();
+                HandleKeyPressWDown();
+                HandleKeyPressEDown();
             }
 
             HandleBeatSnapChanges();
@@ -602,6 +605,29 @@ namespace Quaver.Shared.Screens.Edit
 
             SelectedLayer.Value = nextLayer;
         }
+
+        private void HandleKeyPressQDown()
+        {
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.Q) || KeyboardManager.IsShiftDown())
+                return;
+
+            CompositionTool.Value = EditorCompositionTool.Select;
+        }
+
+        private void HandleKeyPressWDown()
+        {
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.W) || KeyboardManager.IsShiftDown())
+                return;
+            CompositionTool.Value = EditorCompositionTool.Note;
+        }
+
+        private void HandleKeyPressEDown()
+        {
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.E) || KeyboardManager.IsShiftDown())
+                return;
+            CompositionTool.Value = EditorCompositionTool.LongNote;
+        }
+
 
         /// <summary>
         /// </summary>
