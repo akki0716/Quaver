@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Quaver.API.Maps;
@@ -248,8 +249,12 @@ namespace Quaver.Shared.Screens.Main.UI.Jukebox
         {
             //mod_a 起動時の音楽再生を停止 start
             var disableFooterJukebox = true;
+
             if (disableFooterJukebox)
+            {
+                AudioEngine.LoadCurrentTrack();
                 return;
+            }
             //起動時の音楽再生を停止 end
 
             // Don't execute if we're in the middle of loading a new track.
@@ -263,8 +268,10 @@ namespace Quaver.Shared.Screens.Main.UI.Jukebox
                 SelectNextTrack(Direction.Forward);
             }
 
+
             if (AudioEngine.Track != null && !AudioEngine.Track.HasPlayed)
                 AudioEngine.Track.Play();
+
         }
 
         /// <summary>
