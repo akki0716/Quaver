@@ -826,7 +826,7 @@ namespace Quaver.Shared.Screens.Edit
         /// </summary>
         private void HandleKeyPressDelete()
         {
-            if (!KeyboardManager.IsUniqueKeyPress(Keys.Delete))
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.Delete) && !KeyboardManager.IsUniqueKeyPress(Keys.G))
                 return;
 
             DeleteSelectedObjects();
