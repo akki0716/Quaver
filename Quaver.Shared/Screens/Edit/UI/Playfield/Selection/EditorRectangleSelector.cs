@@ -166,6 +166,8 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield.Selection
                     seekTime = Track.Time - 2;
                 else if (MouseManager.CurrentState.Y - Footer.ScreenRectangle.Y <= 60)
                     seekTime = Track.Time - 6;
+                else if (MouseManager.CurrentState.Y - Footer.ScreenRectangle.Y <= 120)
+                    seekTime = Track.Time - 20;
                 else
                     seekTime = Track.Time - 50;
 
@@ -183,6 +185,8 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield.Selection
                 seekTime = Track.Time + 2;
             else if (20 - MouseManager.CurrentState.Y <= 60)
                 seekTime = Track.Time + 6;
+            else if (20 - MouseManager.CurrentState.Y <= 120)
+                seekTime = Track.Time + 20;
             else
                 seekTime = Track.Time + 50;
 
